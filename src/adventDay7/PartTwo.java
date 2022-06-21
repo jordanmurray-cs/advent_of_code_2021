@@ -18,7 +18,7 @@ public class PartTwo {
 		double total = numbers.stream().mapToDouble(a -> a).sum();
 		
 		// Get the size of the list
-		double size = (double) numbers.size();
+		double size = numbers.size();
 		
 		double subtractNum = Math.ceil(total / size);
 		
