@@ -3,17 +3,18 @@ package adventDay8;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class PartTwo {
+
  	
 	public static void main(String[] args) {
 		// Read in the file
 		Map<String, String> data = readData("inputs/DAY8.txt");
-		
-		// Kind of over complicated the structure of the data, but onward & upwards i suppose
 		
 		// Retrieve all of the values from the map and store in a array
 		Object[] arr = data.values().toArray();
@@ -21,7 +22,6 @@ public class PartTwo {
 		
 		Object[] arr1 = data.keySet().toArray();
 		String[] keys = new String[arr1.length];
-	
 		
 		int k = 0;
 		for(Object a : arr) {
@@ -35,58 +35,115 @@ public class PartTwo {
 			k++;
 		}
 		
-		String d0, d1, d2, d3, d4, d5, d6, d7, d8, d9;
-		d0=d1=d2=d3=d4=d5=d6=d7=d8=d9="";
+		String d1, d4;
+		d1=d4="";
+		ArrayList<Integer> finalValues = new ArrayList<>();
 		
 		for(int i = 0; i < keys.length; i++) {
+			Map<String, String> mappedValues = new HashMap<>();
 			String[] splitKey = keys[i].split("\\W+");
+			String[] splitValues = values[i].split("\\W+");
+			
+			// Sorting the arrays by length of characters
+			Arrays.sort(splitKey, (a, b)->Integer.compare(a.length(), b.length()));
 			
 			for(int j = 0; j < splitKey.length; j++) {
 				String singleKey = splitKey[j];
 				int size = singleKey.length();
 				switch(singleKey.length()) {
-					case 2: d1 = singleKey; break;
-					case 3: d7 = singleKey; break;
-					case 4: d4 = singleKey; break;
-					case 7: d8 = singleKey; break;					
+					case 2: 
+						d1 = singleKey;
+						mappedValues.put("1", singleKey);
+						break;
+					case 3: 
+						mappedValues.put("7", singleKey);
+						break;
+					case 4: 
+						d4 = singleKey; 
+						mappedValues.put("4", singleKey);
+						break;
+					case 7:  
+						mappedValues.put("8", singleKey);
+						break;					
+				}
+
+				// Three numbers of size 5 need evaluating
+				if(size == 5) {
+					// If element does not have the first letter of 1
+					String tempFour = d4.replaceAll(String.valueOf(d1.charAt(0)), "").replaceAll(String.valueOf(d1.charAt(1)), "");
+					
+					// The letter three has all the letters of 1
+					if(singleKey.contains(String.valueOf(d1.charAt(0))) && singleKey.contains(String.valueOf(d1.charAt(1)))) {
+						// The element is three
+						mappedValues.put("3", singleKey);
+					}
+					
+					else if(singleKey.contains(tempFour.substring(0,1)) && singleKey.contains(tempFour.substring(1,2))) {
+						// The element is five
+						mappedValues.put("5", singleKey);
+					} 
+					
+					else {
+						mappedValues.put("2", singleKey);
+					}
+				}
+				
+				// Three numbers of size 6 need evaluating
+				else if(size == 6) {
+					char[] remove4 = d4.toCharArray();
+					for(int r = 0; r < remove4.length; r++) {
+						if(remove4[r] == d1.charAt(0) || remove4[r] == d1.charAt(1)) {
+							remove4[r] = ' ';
+						}
+					}
+					String d4Change = new String(remove4).replaceAll(" ", ""); 
+					
+					if(singleKey.contains(String.valueOf(d1.charAt(0))) && singleKey.contains(String.valueOf(d1.charAt(1)))) {
+						if(singleKey.contains(String.valueOf(d4Change.charAt(0))) && singleKey.contains(String.valueOf(d4Change.charAt(1)))) {
+							// The element is nine
+							mappedValues.put("9", singleKey);
+						} else {
+							// This element is zero
+							mappedValues.put("0", singleKey);
+						}
+					} else {
+						// The element is six
+						mappedValues.put("6", singleKey);	
+					}
+					
+				}
+			
+			}
+			
+			String addNum = "";
+			for(int v = 0; v < splitValues.length; v++) {
+				char[] singleValue  = splitValues[v].toCharArray();
+				Arrays.sort(singleValue);
+				checkvalues:
+				for(int p = 0; p < mappedValues.size(); p++) {
+					String iterateValue = mappedValues.get(String.valueOf(p));
+					char[] compare = iterateValue.toCharArray();
+					Arrays.sort(compare);
+					
+					if(new String(compare).equals(new String(singleValue))) {
+						addNum += String.valueOf(p);
+						break checkvalues;
+					}
 				}
 			}
-			System.out.println("d0: " + d0);
-			System.out.println("d1: " + d1);
-			System.out.println("d2: " + d2);
-			System.out.println("d3: " + d3);
-			System.out.println("d4: " + d4);
-			System.out.println("d5: " + d5);
-			System.out.println("d6: " + d6);
-			System.out.println("d7: " + d7);
-			System.out.println("d8: " + d8);
-			System.out.println("d9: " + d9);
+			finalValues.add(Integer.parseInt(addNum));
 		}
 		
+		System.out.println("RESULT: " + getTotal(finalValues));
+
 	}
 	
-	static void somemess() {
-//		char[] k5, k2, k3, k9, k6, k0;
-//		k5="cdfbe".toCharArray();k2="gcdfa".toCharArray();
-//		k3="fbcad".toCharArray();k9="cefabd".toCharArray();
-//		k6="cdfgeb".toCharArray();k0="cagedb".toCharArray();
-//		Arrays.sort(k5);Arrays.sort(k2);Arrays.sort(k3);
-//		Arrays.sort(k9); Arrays.sort(k6);Arrays.sort(k0);
-		
-		
-		
-		// ----------------------------------		
-		// Decipher the signals
-		char[] one  = "cdfbe".toCharArray();
-		char[] two  = "cdfeb".toCharArray();
-		
-		Arrays.sort(one);
-		Arrays.sort(two);
-		
-		if(Arrays.equals(one, two)) {
-			System.out.println(true);
+	static int getTotal(ArrayList<Integer> finalValues) {
+		int total = 0;
+		for(int n : finalValues) {
+			total += n;
 		}
-		// ----------------------------------
+		return total;
 	}
 	
 	static void print(Map<String, String> data) {
@@ -120,7 +177,6 @@ public class PartTwo {
 							value += n + " ";
 						}
 					}
-					
 					map.put(key, value);
 				}
 				
