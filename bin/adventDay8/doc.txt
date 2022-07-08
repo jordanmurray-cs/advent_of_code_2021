@@ -1,0 +1,130 @@
+/*
+		 * Make note of all ten unique signal patterns
+		 * Write down a single four digit output value 
+		 * Which pattern responds to which digit
+
+
+
+			---------------------------------------
+		   	  0:      1:      2:      3:      4:
+			 aaaa    ....    aaaa    aaaa    ....
+			b    c  .    c  .    c  .    c  b    c
+			b    c  .    c  .    c  .    c  b    c
+			 ....    ....    dddd    dddd    dddd
+			e    f  .    f  e    .  .    f  .    f
+			e    f  .    f  e    .  .    f  .    f
+			 gggg    ....    gggg    gggg    ....
+			
+			  5:      6:      7:      8:      9:
+			 aaaa    aaaa    aaaa    aaaa    aaaa
+			b    .  b    .  .    c  b    c  b    c
+			b    .  b    .  .    c  b    c  b    c
+			 dddd    dddd    ....    dddd    dddd
+			.    f  e    f  .    f  e    f  .    f
+			.    f  e    f  .    f  e    f  .    f
+			 gggg    gggg    ....    gggg    gggg
+			--------------------------------------- 
+
+			THE NUMBERS
+			*2* 
+			- missing two elements
+			- missing elements b & f
+
+			*3*
+			- missing two element 
+			- missing elements b & e
+
+			*5*
+			- missing two elements
+			- missing elements c & e
+
+			*6*
+			- missing one element
+			- missing element b
+
+			*9*
+			- missing one element
+			- missing element e
+
+
+			 ....
+			.    d  
+			.    d  
+			 ....   
+			.    b  
+			.    b  
+			 .... 
+
+			 6 misssing d. But contains everything else
+			  
+
+
+
+
+
+			--------------------------------------- 
+
+			cdfbe: 5
+			 ....
+			b    c  
+			b    c  
+			 dddd   
+			e    f  
+			e    f  
+			 ....  
+
+
+			gcdfa: 2
+			 aaaa
+			.    c  
+			.    c  
+			 dddd   
+			.    f  
+			.    f  
+			 gggg  
+
+
+			fbcad: 3
+			 aaaa
+			b    c  
+			b    c  
+			 dddd   
+			.    f  
+			.    f  
+			 ....  
+
+
+			 ---------------------------------------
+			 + 0 = a b c   e f g - one missing
+			 * 1 =     c     f   - five missing
+			 - 2 = a   c d e   g - two missing
+			 - 3 = a   c d   f g - two missing
+			 * 4 =   b c d   f   - three missing
+			 - 5 = a b   d   f g - two missing
+			 + 6 = a b   d e f g - one missing
+			 * 7 = a   c     f   - four missing
+			 * 8 = a b c d e f g - none missing
+			 + 9 = a b c d   f g - one missing
+			 ---------------------------------------
+			 
+			 
+		 * NOTES: 
+		  	 0 missing = 8
+			 1 missing = 0,6,9
+			 2 missing = 2,3,5
+			 3 missing = 4
+			 4 missing = 7
+			 5 missing = 1
+		 * 		
+
+		 	        
+			 ....    ....    ....    ....    ....
+			.    .  .    .  .    .  .    .  .    .
+			.    .  .    .  .    .  .    .  .    .
+			 ....    ....    ....    ....    ....
+			.    .  .    .  .    .  .    .  .    .
+			.    .  .    .  .    .  .    .  .    .
+			 ....    ....    ....    ....    ....
+
+		 */
+		
