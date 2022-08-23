@@ -1,70 +1,127 @@
 package adventDay10;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Collectors;
-
+import java.util.Collections;
+import java.util.Deque;
+import java.util.List;
 public class PartOne {
+	static int total = 0;
 
 	public static void main(String[] args) throws IOException {
 		try {
-			BufferedReader br = new BufferedReader(new FileReader("inputs/DAY10EX2.txt"));
+			BufferedReader br = new BufferedReader(new FileReader("inputs/DAY10.txt"));
 			String line;
-			ArrayList<String> resultingCharacter = new ArrayList<>();
-			
+
+			int points = 0;
+			List<BigInteger> bigInts = new ArrayList<>();
 			while((line = br.readLine()) != null) {
-				String[] arr = isLineCorrupted(line).trim().split("");
-				String subLine = "";
-//				System.out.println(isLineCorrupted(line));
+				boolean enable = true;
+				char[] arr = line.toCharArray();
+				Deque<Character> deque = new ArrayDeque<>();
 				
-				outterfor:
-				for(int i = 0; i < arr.length - 1; i++) {
-					String opening = arr[i];
-					
-					for(int k = i; k < arr.length - 1; k++) {
-						boolean foundMatch = false;
-						String next = arr[k + 1];
+				char head = ' ';
+				thisfor: 
+				for(char c : arr) {
+					if(!deque.isEmpty()) {
+						 head = deque.peek();
+					} 
+						 
+					switch(c) {
+					case '{':
+						deque.push(c);
+						break;
+					case '(':
+						deque.push(c);
+						break;
+					case '<':
+						deque.push(c);
+						break;
+					case '[':
+						deque.push(c);
+						break;
 						
-						checkopening:
-						switch(opening) {
-						case "(":
-							if(next.equals(")")) {
-								foundMatch = true;
-								break checkopening;
-							}
-						case "{":
-							if(next.equals("}")) {
-								foundMatch = true;
-								break checkopening;
-							}
-						case "<":
-							if(next.equals(">")) {
-								foundMatch = true;
-								break checkopening;
-							}
-						case "[":
-							if(next.equals("]")) {
-								foundMatch = true;
-								break checkopening;
-							}
+					case '}':
+						if(!(head == '{')) {
+							points += 1197;
+							enable = false;
+							break thisfor;
 						}
+						deque.pop();
+						break;
+					case '>':
+						if(!(head == '<')) {
+							points += 25137;
+							enable = false;
+							break thisfor;
+						}
+						deque.pop();
+						break;
+					case ')':
+						if(!(head == '(')) {
+							points += 3;
+							enable = false;
+							break thisfor;
+						}
+						deque.pop();
+						break;
+					case ']':
+						if(!(head == '[')) {
+							points += 57;
+							enable = false;
+							break thisfor;
+						}
+						deque.pop();
+						break;
 						
-						if(foundMatch) {
-//							System.out.println(opening + ", " +  next);
-//							System.out.println(i + ", " + k);
-							for(int q = i; q <= k; q++) {
-								subLine += arr[q];
-							}
-							break outterfor;
+					}
+					
+				}
+				
+				
+				if (enable) {
+					BigInteger score = BigInteger.ZERO;
+					for (char character : deque) {
+						score = score.multiply(new BigInteger("5"));
+						switch (character) {
+						case '(':
+							score = score.add(new BigInteger("1"));
+							break;
+						case '[':
+							score = score.add(new BigInteger("2"));
+							break;
+						case '{':
+							score = score.add(new BigInteger("3"));
+							break;
+						case '<':
+							score = score.add(new BigInteger("4"));
+							break;
 
 						}
 					}
-				}	// End for
-				System.out.println(subLine);
-			}						
+					bigInts.add(score);
+				}
+			
+				
+				
+			}	// End while
+			
+			Collections.sort(bigInts);
+			System.out.println("Part one answer: " + points);
+			System.out.println("Part two answer: " + bigInts.get((int) Math.floor(bigInts.size() / 2)));
+			
+			
+			
+
+			
+			
+			
+			
+
 		} catch(Exception e) {
 			System.out.println(e);
 		}
@@ -72,66 +129,4 @@ public class PartOne {
 				
 	}	// End main
 	
-	
-	private static String isLineCorrupted(String line) {
-		String[] arr = line.trim().split("");
-		
-		for (int i = 0; i < line.length() - 2; i++) {
-			String opening = arr[i];
-			String next = arr[i + 1];
-		
-			boolean foundMatch = false;
-
-			switch (opening) {
-			case "(":
-				if (next.equals(")")) {
-					foundMatch = true;
-				}
-			case "{":
-				if (next.equals("}")) {
-					foundMatch = true;
-				}
-			case "<":
-				if (next.equals(">")) {
-					foundMatch = true;
-				}
-			case "[":
-				if (next.equals("]")) {
-					foundMatch = true;
-				}
-			}
-
-			if (foundMatch) {
-				arr[i] = "";
-				arr[i + 1] = "";
-			}
-		} 
-		return String.join("", arr);
-	}
-	
-	private static boolean checkMatch(int opening, int nextElement, String[] arr) {
-		String next = arr[nextElement];
-		switch(arr[opening]) {
-		case "(":
-			if(next.equals(")") && !arr[nextElement - 1].equals("(")) {
-				return true;
-			}
-		case "{":
-			if(next.equals("}") && !arr[nextElement - 1].equals("{")) {
-				return true;
-			}
-		case "<":
-			if(next.equals(">") && !arr[nextElement - 1].equals("<")) {
-				return true;
-			}
-		case "[":
-			if(next.equals("]") && !arr[nextElement - 1].equals("[")) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-
 }	// End class
